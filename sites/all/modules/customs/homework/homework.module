@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function homework_menu() {
+  $items['theme-function'] = array(
+    'title' => 'Output array using function type of output.',
+    'page callback' => 'callback_function',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['theme-template'] = array(
+    'title' => 'Output one item from array using template.',
+    'page callback' => 'callback_template',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Page callbacks.
+ */
+function callback_function() {
+  return theme('theming_function', array('items' => employees()));
+}
+function callback_template() {
+  return theme('theming_template', array('items' => employees()));
+}
+
+/**
+ * Implements hook_theme().
+ */
+function homework_theme() {
+  return array(
+    'theming_function' => array(
+      'render element' => 'element',
+    ),
+    'theming_template' => array(
+      'template' => 'theming-template--employees',
+      'variables' => array('items' => NULL),
+    ),
+  );
+}
+
+/**
+ * Define list of employees
+ */
+function employees() {
+  $content[] = array(
+    'name' => 'name',
+    'salary' => '100',
+    'job title' => 'developer',
+  );
+  $content[] = array(
+    'name' => 'name2',
+    'salary' => '200',
+    'job title' => 'manager',
+  );
+  $content[] = array(
+    'name' => 'name3',
+    'salary' => '300',
+    'job title' => 'qa',
+  );
+  $content[] = array(
+    'name' => 'name4',
+    'salary' => '400',
+    'job title' => 'ba',
+  );
+  $content[] = array(
+    'name' => 'name5',
+    'salary' => '500',
+    'job title' => 'tba',
+  );
+  return $content;
+}
+
+/**
+ * Theme list of employees
+ */
+function theme_theming_function($variables) {
+  $output = '';
+  if (isset($variables['items'])) {
+    foreach($variables['items'] as $value) {
+      $output .= '<ul>';
+      $output .= '<li>'.$value['name'].'</li>';
+      $output .= '<li>'.$value['salary'].'</li>';
+      $output .= '<li>'.$value['job title'].'</li>';
+      $output .= '</ul>';
+    }
+  }
+  return $output;
+}
